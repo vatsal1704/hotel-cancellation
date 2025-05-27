@@ -51,5 +51,5 @@ def main():
         response=prediction(inp_list)
         st.success(response)
 
-if __name__==__'main__':
+if __name__=='__main__':
     main()
