@@ -42,7 +42,7 @@ def main():
     park = (lambda x:1 if x=='yes' else 0)(st.selectbox('Does customer need parking',['yes','no']))
     spcl = st.selectbox('How many special requests have been mode',[0,1,2,3,4,5])
     
-4. Safe Transformation
+# 4. Safe Transformation
     try:
         lt_t, price_t = transformer.transform([[lt, price]])[0]
     except Exception as e:
