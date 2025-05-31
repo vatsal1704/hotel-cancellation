@@ -41,13 +41,40 @@ def main():
     park = (lambda x:1 if x=='yes' else 0)(st.selectbox('Does customer need parking',['yes','no']))
     spcl = st.selectbox('How many special requests have been mode',[0,1,2,3,4,5])
     
-    lt_t,price_t = transformer.transform([[lt,price]])[0]
+    # lt_t,price_t = transformer.transform([[lt,price]])[0]
     
-    inp_list = [lt_t,spcl,price_t,adult,wkndn,park,weekn,mkt,arr_m,arr_w,totan,dep_w]
+    # inp_list = [lt_t,spcl,price_t,adult,wkndn,park,weekn,mkt,arr_m,arr_w,totan,dep_w]
     
+    # if st.button('Predict'):
+    #     response = prediction(inp_list)
+    #     st.success(response)
     if st.button('Predict'):
+    # Input validation
+    if lt == '' or price == '' or weekn == '' or wkndn == '':
+        st.error("Please fill in all required numerical fields.")
+    else:
+        # Convert values
+        lt = float(lt)
+        price = float(price)
+        weekn = int(weekn)
+        wkndn = int(wkndn)
+        totan = weekn + wkndn
+        adult = int(adult)
+        spcl = int(spcl)
+
+        # Prepare DataFrame for transformation
+        input_df = pd.DataFrame([[lt, price]], columns=['lead_time', 'price'])
+
+        # Transform
+        lt_t, price_t = transformer.transform(input_df)[0]
+
+        # Construct feature list
+        inp_list = [lt_t, spcl, price_t, adult, wkndn, park, weekn, mkt, arr_m, arr_w, totan, dep_w]
+
+        # Make prediction
         response = prediction(inp_list)
         st.success(response)
+
         
 if __name__=='__main__':
     main()
