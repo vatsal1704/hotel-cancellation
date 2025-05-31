@@ -40,7 +40,7 @@ def main():
     weekn=st.text_input('Enter the number of week nights in stay')
     wkndn=st.text_input('Enter the number of weekend nights in stay')
     totan=weekn+wkndn
-    park=(lambda x:1 if x=='yes' else 0)(st.selectbox('Does customer need parking',['yes'],['no']))
+    park = (lambda x: 1 if x == 'yes' else 0)(st.selectbox('Does customer need parking', ['yes', 'no']))
     spcl=st.selectbox('How many special requests have been made',[0,1,2,3,4,5])
 
 
