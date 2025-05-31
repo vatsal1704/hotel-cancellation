@@ -58,7 +58,7 @@ def main():
     
     # 1. Numeric Inputs (converted to correct type upfront)
     lt = st.number_input('Enter the lead time in days', min_value=0, value=0)
-    price = st.number_input('Enter the price of the room', min_value=0.0, value=0.0)
+    price = st.number_input('Enter the price of the room')
     
     # 2. Categorical Inputs
     mkt = 1 if st.selectbox('How the booking was made', ['Online', 'Offline']) == 'Online' else 0
