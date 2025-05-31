@@ -49,31 +49,31 @@ def main():
     #     response = prediction(inp_list)
     #     st.success(response)
     if st.button('Predict'):
-    # Input validation
-    if lt == '' or price == '' or weekn == '' or wkndn == '':
-        st.error("Please fill in all required numerical fields.")
-    else:
-        # Convert values
-        lt = float(lt)
-        price = float(price)
-        weekn = int(weekn)
-        wkndn = int(wkndn)
-        totan = weekn + wkndn
-        adult = int(adult)
-        spcl = int(spcl)
-
-        # Prepare DataFrame for transformation
-        input_df = pd.DataFrame([[lt, price]], columns=['lead_time', 'price'])
-
-        # Transform
-        lt_t, price_t = transformer.transform(input_df)[0]
-
-        # Construct feature list
-        inp_list = [lt_t, spcl, price_t, adult, wkndn, park, weekn, mkt, arr_m, arr_w, totan, dep_w]
-
-        # Make prediction
-        response = prediction(inp_list)
-        st.success(response)
+        # Input validation
+        if lt == '' or price == '' or weekn == '' or wkndn == '':
+            st.error("Please fill in all required numerical fields.")
+        else:
+            # Convert values
+            lt = float(lt)
+            price = float(price)
+            weekn = int(weekn)
+            wkndn = int(wkndn)
+            totan = weekn + wkndn
+            adult = int(adult)
+            spcl = int(spcl)
+    
+            # Prepare DataFrame for transformation
+            input_df = pd.DataFrame([[lt, price]], columns=['lead_time', 'price'])
+    
+            # Transform
+            lt_t, price_t = transformer.transform(input_df)[0]
+    
+            # Construct feature list
+            inp_list = [lt_t, spcl, price_t, adult, wkndn, park, weekn, mkt, arr_m, arr_w, totan, dep_w]
+    
+            # Make prediction
+            response = prediction(inp_list)
+            st.success(response)
 
         
 if __name__=='__main__':
