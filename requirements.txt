@@ -1,4 +1,4 @@
 xgboost
 scikit-learn==1.5.1
 streamlit
-pickle5
+joblib
