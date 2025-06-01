@@ -63,123 +63,117 @@ def prediction(input_list):
 
 
 
+# def main():
+#     st.title('INN HOTEL GROUP')
+    
+#     # 1. Numeric Inputs (converted to correct type upfront)
+#     lt = st.number_input('Enter the lead time in days', min_value=0, value=0)
+#     price = st.number_input('Enter the price of the room', min_value=0.0, value=0.0)
+    
+#     # 2. Categorical Inputs
+#     mkt = 1 if st.selectbox('How the booking was made', ['Online', 'Offline']) == 'Online' else 0
+#     adult = st.selectbox('How many adults', [1, 2, 3, 4])
+#     arr_m = st.slider('What is the month of arrival?', min_value=1, max_value=12, step=1)
+    
+#     # Weekday mapping (simplified)
+#     weekday_map = {'Mon':0, 'Tue':1, 'Wed':2, 'Thus':3, 'Fri':4, 'Sat':5, 'Sun':6}
+#     arr_w = weekday_map[st.selectbox('Arrival weekday', list(weekday_map.keys()))]
+#     dep_w = weekday_map[st.selectbox('Departure weekday', list(weekday_map.keys()))]
+    
+#     # 3. Numeric Inputs with validation
+#     weekn = st.number_input('Week nights', min_value=0, value=0)
+#     wkndn = st.number_input('Weekend nights', min_value=0, value=0)
+#     totan = weekn + wkndn  # Correctly sums numbers
+    
+#     park = 1 if st.selectbox('Need parking?', ['yes', 'no']) == 'yes' else 0
+#     spcl = st.selectbox('Special requests', [0, 1, 2, 3, 4, 5])
+    
+#     # 4. Safe Transformation
+#     try:
+#         lt_t, price_t = transformer.transform([[lt, price]])[0]
+#     except Exception as e:
+#         st.error(f"Error processing inputs: {str(e)}")
+#         st.stop()  # Prevents further execution
+    
+#     # 5. Prepare final feature list
+#     inp_list = [lt_t, spcl, price_t, adult, wkndn, park, weekn, mkt, arr_m, arr_w, totan, dep_w]
+    
+#     # 6. Prediction with button
+#     if st.button('Predict'):
+#         try:
+#             response = prediction(inp_list)
+#             st.success(response)
+#         except Exception as e:
+#             st.error(f"Prediction failed: {str(e)}")
+
+
+
+
 def main():
     st.title('INN HOTEL GROUP')
-    
-    # 1. Numeric Inputs (converted to correct type upfront)
-    lt = st.number_input('Enter the lead time in days', min_value=0, value=0)
-    price = st.number_input('Enter the price of the room', min_value=0.0, value=0.0)
-    
+
+    # 1. Clean Numeric Inputs (as text, no default, no steppers)
+    lt_str = st.text_input('Enter the lead time in days')
+    price_str = st.text_input('Enter the price of the room')
+
+    # Validate & Convert numeric fields
+    if not lt_str or not price_str:
+        st.warning("Please enter both lead time and room price.")
+        st.stop()
+
+    try:
+        lt = int(lt_str)
+        price = float(price_str)
+    except ValueError:
+        st.error("Lead time must be an integer and price must be a number.")
+        st.stop()
+
     # 2. Categorical Inputs
     mkt = 1 if st.selectbox('How the booking was made', ['Online', 'Offline']) == 'Online' else 0
     adult = st.selectbox('How many adults', [1, 2, 3, 4])
     arr_m = st.slider('What is the month of arrival?', min_value=1, max_value=12, step=1)
-    
-    # Weekday mapping (simplified)
-    weekday_map = {'Mon':0, 'Tue':1, 'Wed':2, 'Thus':3, 'Fri':4, 'Sat':5, 'Sun':6}
+
+    weekday_map = {'Mon': 0, 'Tue': 1, 'Wed': 2, 'Thu': 3, 'Fri': 4, 'Sat': 5, 'Sun': 6}
     arr_w = weekday_map[st.selectbox('Arrival weekday', list(weekday_map.keys()))]
     dep_w = weekday_map[st.selectbox('Departure weekday', list(weekday_map.keys()))]
-    
-    # 3. Numeric Inputs with validation
-    weekn = st.number_input('Week nights', min_value=0, value=0)
-    wkndn = st.number_input('Weekend nights', min_value=0, value=0)
-    totan = weekn + wkndn  # Correctly sums numbers
-    
+
+    # 3. Week Nights and Weekend Nights (clean, no steppers)
+    weekn_str = st.text_input('Week nights')
+    wkndn_str = st.text_input('Weekend nights')
+
+    if not weekn_str or not wkndn_str:
+        st.warning("Please enter both week nights and weekend nights.")
+        st.stop()
+
+    try:
+        weekn = int(weekn_str)
+        wkndn = int(wkndn_str)
+    except ValueError:
+        st.error("Week nights and Weekend nights must be integers.")
+        st.stop()
+
+    totan = weekn + wkndn
+
     park = 1 if st.selectbox('Need parking?', ['yes', 'no']) == 'yes' else 0
     spcl = st.selectbox('Special requests', [0, 1, 2, 3, 4, 5])
-    
-    # 4. Safe Transformation
+
+    # 4. Transformation
     try:
         lt_t, price_t = transformer.transform([[lt, price]])[0]
     except Exception as e:
         st.error(f"Error processing inputs: {str(e)}")
-        st.stop()  # Prevents further execution
-    
-    # 5. Prepare final feature list
+        st.stop()
+
+    # 5. Final feature list
     inp_list = [lt_t, spcl, price_t, adult, wkndn, park, weekn, mkt, arr_m, arr_w, totan, dep_w]
-    
-    # 6. Prediction with button
+
+    # 6. Prediction trigger
     if st.button('Predict'):
         try:
             response = prediction(inp_list)
             st.success(response)
         except Exception as e:
             st.error(f"Prediction failed: {str(e)}")
-
-
-
-
-# def main():
-#     st.title('INN HOTEL GROUP - Booking Cancellation Prediction')
-    
-#     # Input Section with no default values
-#     col1, col2 = st.columns(2)
-    
-#     with col1:
-#         # Numerical inputs (no default values)
-#         lt = st.number_input('Lead time (days)', min_value=0, max_value=365, value=None, placeholder="Enter days")
-#         price = st.number_input('Room price ($)', min_value=0.0, value=None, step=1.0, placeholder="Enter price")
-#         weekn = st.number_input('Week nights', min_value=0, max_value=21, value=None, placeholder="Enter nights")
-#         wkndn = st.number_input('Weekend nights', min_value=0, max_value=10, value=None, placeholder="Enter nights")
-    
-#     with col2:
-#         # Categorical inputs
-#         mkt = 1 if st.selectbox('Booking channel', ['Online', 'Offline'], index=None) == 'Online' else 0
-#         adult = st.selectbox('Number of adults', [1, 2, 3, 4], index=None)
-#         arr_m = st.slider('Arrival month', 1, 12, value=None)
-        
-#         # Weekday mapping
-#         weekday_map = {'Monday':0, 'Tuesday':1, 'Wednesday':2, 
-#                       'Thursday':3, 'Friday':4, 'Saturday':5, 'Sunday':6}
-#         arr_w = st.selectbox('Arrival weekday', list(weekday_map.keys()), index=None)
-#         dep_w = st.selectbox('Departure weekday', list(weekday_map.keys()), index=None)
-        
-#         park = 1 if st.selectbox('Parking needed?', ['yes', 'no'], index=None) == 'yes' else 0
-#         spcl = st.selectbox('Special requests', [0, 1, 2, 3, 4, 5], index=None)
-    
-#     # Data Processing
-#     if st.button('Predict'):
-#         # Validate required inputs
-#         if None in [lt, price, weekn, wkndn] or None in [arr_w, dep_w]:
-#             st.error("Please fill all required fields")
-#             return
-            
-#         try:
-#             # Convert weekdays to numbers
-#             arr_w = weekday_map[arr_w]
-#             dep_w = weekday_map[dep_w]
-            
-#             # Calculate total nights
-#             totan = weekn + wkndn
-            
-#             # Transform numerical features
-#             lt_t, price_t = transformer.transform([[lt, price]])[0]
-            
-#             # Prepare feature vector
-#             features = [
-#                 lt_t,          # transformed lead time
-#                 spcl,         # special requests
-#                 price_t,      # transformed price
-#                 adult,        # number of adults
-#                 wkndn,        # weekend nights
-#                 park,         # parking needed
-#                 weekn,        # week nights
-#                 mkt,          # marketing channel
-#                 arr_m,        # arrival month
-#                 arr_w,        # arrival weekday
-#                 totan,        # total nights
-#                 dep_w         # departure weekday
-#             ]
-            
-#             # Get prediction
-#             prob = model.predict_proba([features])[0][1]
-#             if prob > 0.5:
-#                 st.error(f"⚠️ High cancellation risk: {prob:.1%} probability")
-#             else:
-#                 st.success(f"✅ Low cancellation risk: {prob:.1%} probability")
-                
-#         except Exception as e:
-#             st.error(f"Processing failed: {str(e)}")
         
 if __name__=='__main__':
     main()
