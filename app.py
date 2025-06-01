@@ -46,7 +46,8 @@ def main():
 
     mkt = 1 if st.selectbox('How the booking was made', ['Select', 'Online', 'Offline']) == 'Online' else 0
     adult = st.selectbox('How many adults?', ['Select', 1, 2, 3, 4])
-    arr_m = st.selectbox('Month of arrival?', ['Select'] + list(range(1, 13)))
+    # arr_m = st.selectbox('Month of arrival?', ['Select'] + list(range(1, 13)))
+    arr_m = st.slider('What is the month of arrival?', min_value=1, max_value=12, step=1)
 
     weekday_map = {'Mon': 0, 'Tue': 1, 'Wed': 2, 'Thus': 3, 'Fri': 4, 'Sat': 5, 'Sun': 6}
     arr_day = st.selectbox('Arrival weekday', ['Select'] + list(weekday_map.keys()))
